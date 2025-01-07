@@ -5,8 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Suspense } from 'react';
 
-export default function Home() {
+function Home() {
   const searchParams = useSearchParams();
 
   const nome = searchParams.get('p');
@@ -105,5 +106,13 @@ export default function Home() {
 
 
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense>
+      <Home />
+    </Suspense>
   );
 }
