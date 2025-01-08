@@ -6,11 +6,43 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Suspense } from 'react';
+import React from 'react';
+import axios from 'axios';
+import { useToast } from '@/hooks/use-toast';
 
 function Home() {
-  const searchParams = useSearchParams();
 
-  const nome = searchParams.get('p');
+  const { toast } = useToast()
+
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
+
+  const [loading, setLoading] = React.useState(true);
+  const [nome, setNome] = React.useState('');
+
+  React.useEffect(() => {
+    axios.get("/api/convidado?id=" + id)
+      .then((response) => {
+        setNome(response.data.nome)
+        setLoading(false)
+      })
+  }, [id])
+
+  const confirmarPresenca = () => {
+    axios.put("/api/confirm-presence?id=" + id, { confirmado: true })
+      .then(() => toast({ title: "Presença confirmada!" }))
+      .catch(() => toast({ title: "Erro ao confirmar presença", variant: "destructive" }))
+  }
+
+  const recusarPresenca = () => {
+    axios.put("/api/confirm-presence?id=" + id, { confirmado: false })
+      .then(() => toast({ title: "Presença recusada!" }))
+      .catch(() => toast({ title: "Erro ao recusar presença", variant: "destructive" }))
+  }
+
+  if (loading) {
+    return <div className='bg-amber-100 h-screen w-full grid place-items-center'><div className='border-4 border-green border-b-transparent rounded-full size-12 animate-spin'>&nbsp;</div></div>; // Exibe uma mensagem de carregamento enquanto os dados estão sendo buscados
+  }
 
   return (
     <main className="bg-ocean bg-cover w-full h-screen bg-no-repeat bg-[80%] flex items-end justify-start py-20 px-10 flex-col gap-6 text-green">
@@ -36,7 +68,7 @@ function Home() {
               VOU IR
             </button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className='w-11/12 rounded-sm'>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirmar ida</AlertDialogTitle>
               <AlertDialogDescription>
@@ -46,7 +78,7 @@ function Home() {
             <AlertDialogFooter>
               <AlertDialogCancel>Voltar</AlertDialogCancel>
               <DialogTrigger asChild>
-                <AlertDialogAction>Confirmar</AlertDialogAction>
+                <AlertDialogAction onClick={confirmarPresenca}>Confirmar</AlertDialogAction>
               </DialogTrigger>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -74,7 +106,7 @@ function Home() {
               NÃO VOU IR
             </button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className='w-11/12 rounded-sm'>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirmar não ida</AlertDialogTitle>
               <AlertDialogDescription>
@@ -84,7 +116,7 @@ function Home() {
             <AlertDialogFooter>
               <AlertDialogCancel>Voltar</AlertDialogCancel>
               <DialogTrigger asChild>
-                <AlertDialogAction>Confirmar</AlertDialogAction>
+                <AlertDialogAction onClick={recusarPresenca}>Confirmar</AlertDialogAction>
               </DialogTrigger>
             </AlertDialogFooter>
           </AlertDialogContent>

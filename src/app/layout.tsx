@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from 'next/font/local'
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const roca = localFont({ src: "/fonts/Roca.ttf", variable: "--font-roca" })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         className={`antialiased ${roca.variable} ${montserrat.variable} ${openSans.variable} ${brittany.variable}`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
