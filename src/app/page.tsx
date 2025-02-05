@@ -65,7 +65,7 @@ function Home() {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button className="bg-green text-white rounded-md px-4 py-2 w-4/5 transition-all hover:opacity-60 active:translate-y-1">
-              VOU IR
+              VOU
             </button>
           </AlertDialogTrigger>
           <AlertDialogContent className='w-11/12 rounded-sm'>
@@ -103,7 +103,7 @@ function Home() {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button className="text-green border border-green rounded-md px-4 py-2 w-4/5 transition-all hover:opacity-60 active:translate-y-1">
-              NÃO VOU IR
+              NÃO VOU
             </button>
           </AlertDialogTrigger>
           <AlertDialogContent className='w-11/12 rounded-sm'>
